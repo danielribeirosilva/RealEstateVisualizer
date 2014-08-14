@@ -2,11 +2,21 @@
 	<head>
 		<!-- JS -->
 		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+		<script type="text/javascript" src="js/underscore.js"></script>
+		<!--script type="text/javascript" src="js/jquery-ui.min.js"></script-->
+		<!--script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script-->
 		<script type="text/javascript" src="js/angular.js"></script>
+		<script type="text/javascript" src="js/angular.rangeSlider.js"></script>
+		
+
 
 		<!-- CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+		<!--link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" /-->
+		<link href="css/angular.rangeSlider.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body ng-controller="dataController" class="ng-scope">
@@ -14,10 +24,27 @@
 	    
 
 		<ul>
-			<li ng-repeat="property in properties">
-				{{property.city}}
+			<li ng-repeat="property in properties()">
+				=> {{property.neighborhood}} - {{property.area_total}}
 			</li>
 		</ul>
 
+
+		<ul>
+		    <li ng-repeat="rangeFilter in rangeFilters" style="list-style-type: none;">
+		    	<h3>{{rangeFilter.name}}</h3> 
+		        <p>{{rangeFilter.lowValue}} {{rangeFilter.unit}} - {{rangeFilter.upValue}} {{rangeFilter.unit}}</p> 
+		    	
+		    	<div range-slider min="rangeFilter.lowBound" max="rangeFilter.upBound" model-min="rangeFilter.lowValue" model-max="rangeFilter.upValue" decimal-places="rangeFilter.decimalPlaces"></div>
+		    </li>
+		</ul>
+
+		
+		<p>{{properties()}}</p>
+
+
+
 	</body>
+
+
 </HTML>
