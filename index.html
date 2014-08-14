@@ -1,0 +1,23 @@
+<HTML ng-app="myApp" class="ng-scope">
+	<head>
+		<!-- JS -->
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+		<script type="text/javascript" src="js/angular.js"></script>
+
+		<!-- CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body ng-controller="dataController" class="ng-scope">
+		<script type="text/javascript" src="js/app.js"></script>
+	    
+
+		<ul>
+			<li ng-repeat="property in properties">
+				{{property.city}}
+			</li>
+		</ul>
+
+	</body>
+</HTML>
