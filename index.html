@@ -21,28 +21,42 @@
 
 	<body ng-controller="dataController" class="ng-scope">
 		<script type="text/javascript" src="js/app.js"></script>
-	    
 
-		<ul>
-			<li ng-repeat="property in properties()">
-				=> {{property.neighborhood}} - {{property.area_total}}
-			</li>
-		</ul>
-
-
+		<!-- RANGE FILTERS -->
 		<ul>
 		    <li ng-repeat="rangeFilter in rangeFilters" style="list-style-type: none;">
-		    	<h3>{{rangeFilter.name}}</h3> 
+		    	<h3>{{checkBoxFilter.name}}</h3> 
 		        <p>{{rangeFilter.lowValue}} {{rangeFilter.unit}} - {{rangeFilter.upValue}} {{rangeFilter.unit}}</p> 
 		    	
 		    	<div range-slider min="rangeFilter.lowBound" max="rangeFilter.upBound" model-min="rangeFilter.lowValue" model-max="rangeFilter.upValue" decimal-places="rangeFilter.decimalPlaces"></div>
 		    </li>
 		</ul>
 
-		
-		<p>{{properties()}}</p>
+
+		<!-- CHECKBOX FILTERS -->
+		<ul>
+		    <li ng-repeat="checkBoxFilter in checkBoxFilters" style="list-style-type: none;">
+		    	<h3>{{checkBoxFilter.name}}</h3> 
+
+		        <!-- CHECKBOXES -->
+		        <ul>
+				    <li ng-repeat="checkBox in checkBoxFilter.data" style="list-style-type: none;">
+				    	<input type="checkbox" ng-model="checkBox.active"> {{checkBox.option}}<br>
+				    </li>
+				</ul>
+
+		    </li>
+		</ul>
 
 
+		<div>total properties overall: {{totalPropertiesOverall}}</div>
+		<div>total properties considered: {{totalPropertiesConsidered()}}</div>
+
+		<ul>
+			<li ng-repeat="property in getConsideredProperties()">
+				=> {{property.property_type}}: bairro:{{property.neighborhood}}, &aacute;rea:{{property.area_total}} m&sup2; pre&ccedil;o: {{property.price}}
+			</li>
+		</ul>
 
 	</body>
 
