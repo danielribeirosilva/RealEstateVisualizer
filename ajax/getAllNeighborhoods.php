@@ -29,11 +29,22 @@ function getAllNeighborhoods($city, $property_type){
 	$query = "SELECT DISTINCT(neighborhood) AS neighborhood FROM properties
 			  WHERE `city` = '" . $city . "' AND `property_type` = '" . $property_type . "'
 			  ORDER BY neighborhood";
+
+	$query = 	"SELECT n.*, neighborhoods.lat, neighborhoods.lon FROM 
+					(SELECT DISTINCT(neighborhood) AS neighborhood FROM 
+					properties WHERE `city` = '" . $city . "' AND `property_type` = '" . $property_type . "' 
+					ORDER BY neighborhood) AS n
+				LEFT JOIN neighborhoods ON n.neighborhood = neighborhoods.name";
+
 	$sth = $dbh->prepare($query);
 	$sth->execute();
 	$res = array() ;
 	for($i = 0 ; $i < $sth->rowCount() ; $i++){
-		$res[$i] = $sth->fetch()['neighborhood'];
+		$res[$i] = array();
+		$element = $sth->fetch();
+		$res[$i]['neighborhood'] = $element['neighborhood'];
+		$res[$i]['lat'] = $element['lat'];
+		$res[$i]['lon'] = $element['lon'];
 	}
 	return $res;
 }

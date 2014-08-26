@@ -3,29 +3,54 @@
 		<!-- JS -->
 		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript" src="js/underscore.js"></script>
-		<!--script type="text/javascript" src="js/jquery-ui.min.js"></script-->
-		<!--script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script-->
 		<script type="text/javascript" src="js/angular.js"></script>
+
 		<script type="text/javascript" src="js/angular.rangeSlider.js"></script>
-		
+
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="js/ng-map.min.js"></script>
+		<!--script src='js/lodash.underscore.min.js'></script>
+		<script src='js/angular-google-maps.min.js'></script-->
+
+
 
 
 		<!-- CSS -->
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
-		<!--link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-		<link href="css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
-		<link href="css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" /-->
 		<link href="css/angular.rangeSlider.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body ng-controller="dataController" class="ng-scope">
 		<script type="text/javascript" src="js/app.js"></script>
 
+
+		<div class="title-wrapper">
+			<div class="title-city"><span class="title-city-text">Maringá</span></div>
+			<div class="title-property-type"><span class="title-property-type-text">TERRENOS</span></div>
+		</div>
+
+
+      	<map zoom="11" center="[-23.40, -51.90]" style="display:block;height:300px"></map>
+
+		
+
+		
+		
+
+		<!-- STATS -->
+		<div class="stats-wrapper">
+			<div>total de propriedades: {{totalPropertiesOverall}}</div>
+			<div>propriedades mostradas: {{totalPropertiesConsidered()}}</div>
+		</div>
+
 		<!-- RANGE FILTERS -->
-		<ul>
+		<ul class="range-filter-wrapper">
 		    <li ng-repeat="rangeFilter in rangeFilters" style="list-style-type: none;">
-		    	<h3>{{checkBoxFilter.name}}</h3> 
+		    	<h3>{{rangeFilter.name}}</h3> 
 		        <p>{{rangeFilter.lowValue}} {{rangeFilter.unit}} - {{rangeFilter.upValue}} {{rangeFilter.unit}}</p> 
 		    	
 		    	<div range-slider min="rangeFilter.lowBound" max="rangeFilter.upBound" model-min="rangeFilter.lowValue" model-max="rangeFilter.upValue" decimal-places="rangeFilter.decimalPlaces"></div>
@@ -33,30 +58,74 @@
 		</ul>
 
 
-		<!-- CHECKBOX FILTERS -->
-		<ul>
-		    <li ng-repeat="checkBoxFilter in checkBoxFilters" style="list-style-type: none;">
-		    	<h3>{{checkBoxFilter.name}}</h3> 
+		<!-- CHECKBOX FILTERS (AS AN ACCORDION) -->
+		<div class="accordion-wrapper">
+			<div class="panel-group" id="accordion">
+				<!-- FOR EACH FILTER -->
+			    <div ng-repeat="checkBoxFilter in checkBoxFilters" style="list-style-type: none;" class="panel panel-default">
 
-		        <!-- CHECKBOXES -->
-		        <ul>
-				    <li ng-repeat="checkBox in checkBoxFilter.data" style="list-style-type: none;">
-				    	<input type="checkbox" ng-model="checkBox.active"> {{checkBox.option}}<br>
-				    </li>
-				</ul>
+			    	<!-- FILTER NAME -->
+			    	<div class="panel-heading">
+				      <h4 class="panel-title">
+				        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$index}}">
+				          {{checkBoxFilter.name}}
+				        </a>
+				      </h4>
+				    </div>
 
-		    </li>
-		</ul>
+				    <!-- FILTER CONTENT -->
+				    <div id="collapse{{$index}}" class="panel-collapse collapse in">
+				      <div class="panel-body">
+				        
+				      	<!-- SELECT ALL BUTTON -->
+				    	<form ng-submit="selectAllCheckBoxes(checkBoxFilter.data)">
+					    	<input class="btn-primary" type="submit" value="selecionar todos">
+					    </form>
+					    <!-- UNSELECT ALL BUTTON -->
+				    	<form ng-submit="unselectAllCheckBoxes(checkBoxFilter.data)">
+					    	<input class="btn-primary" type="submit" value="desmarcar todos">
+					    </form>
+				        <!-- CHECKBOXES -->
+				        <div class="row">
+						    <div class="col-md-3" ng-repeat="checkBox in checkBoxFilter.data" style="list-style-type: none;">
+						    	<input type="checkbox" ng-model="checkBox.active"> {{checkBox.option}}<br>
+						    </div>
+						</div>
+
+				      </div>
+				    </div>
+
+			    </div>
+			</div>
+		</div>
 
 
-		<div>total properties overall: {{totalPropertiesOverall}}</div>
-		<div>total properties considered: {{totalPropertiesConsidered()}}</div>
+		<div class="title-wrapper">
+			<div class="title-city"><span class="title-city-text">Propriedades</span></div>
+		</div>
 
-		<ul>
-			<li ng-repeat="property in getConsideredProperties()">
-				=> {{property.property_type}}: bairro:{{property.neighborhood}}, &aacute;rea:{{property.area_total}} m&sup2; pre&ccedil;o: {{property.price}}
-			</li>
-		</ul>
+
+		<div class="row">
+			<div class="col-md-4 property-block" ng-repeat="property in getConsideredProperties()">
+				<div>
+				  <span class="property-element-column-name">Tipo de Propriedade: </span>
+				  <span class="property-element-column-value">{{property.property_type}}</span>
+				</div>
+				<div>
+				  <span class="property-element-column-name">Bairro: </span>
+				  <span class="property-element-column-value">{{property.neighborhood}}</span>
+				</div>
+				<div>
+				  <span class="property-element-column-name">&Aacute;rea Total: </span>
+				  <span class="property-element-column-value">{{property.area_total}}</span>
+				</div>
+				<div>
+				  <span class="property-element-column-name">Pre&ccedil;o: </span>
+				  <span class="property-element-column-value">R$ {{property.price}}</span>
+				</div>
+				
+			</div>
+		</div>
 
 	</body>
 
